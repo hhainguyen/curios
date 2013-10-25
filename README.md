@@ -43,7 +43,7 @@ These modules should be downloaded manually and extracted to the appropriate dir
   [RDFx](https://drupal.org/project/rdfx)                   | [7.x-2.x-dev](http://ftp.drupal.org/files/projects/rdfx-7.x-2.x-dev.tar.gz) | rdfx
   [SPARQL](https://github.com/stuartraetaylor/sparql)       | [sparql11-0.1.0](https://github.com/stuartraetaylor/sparql/archive/sparql11-0.1.0.tar.gz) | sparql
   [SPARQL Views](https://github.com/stuartraetaylor/sparql_views) | [curios-0.1.0](https://github.com/stuartraetaylor/sparql_views/archive/curios-0.1.0.tar.gz) | sparql_views
-  [CURIOS: Linked Data CMS](https://github.com/stuartraetaylor/curios) | [master](https://github.com/stuartraetaylor/curios/archive/master.zip) | curios
+  [CURIOS: Linked Data CMS](https://github.com/curiosproject/curios) | [master](https://github.com/curiosproject/curios/archive/master.zip) | curios
 
 ### Other dependencies:
 The CURIOS module also relies on modified versions of the ARC2 PHP library and Drupal 7 theme.
