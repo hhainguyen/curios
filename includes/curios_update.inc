@@ -52,10 +52,20 @@ EOT;
  * Displays the 'Admin Tools' page.
  */
 function curios_admin_tools_page() {
-  $latest_records = _curios_latest_record_identifiers(15);
-  $content = '';
+  $page = array();
+  $page[] = array('#markup' => '<p>This page contains a selection of admin tools for the Hebridean Connections repository.</p>');
+  $page[] = curios_latest_records();
 
-  $content .= '<p>This page contains a selection of admin tools for the Hebridean Connections repository.</p>';
+  return $page;
+}
+
+/**
+ * Genearte HTML for latest records list.
+ */
+function curios_latest_records() {
+  $latest_records = _curios_latest_record_identifiers(15);
+
+  $content = '';
   $content .= '<h2>Recently created records:</h2>';
   $content .= '<ul class="plain-list">';
   foreach ($latest_records as $id=>$title) {
@@ -64,6 +74,14 @@ function curios_admin_tools_page() {
   $content .= '</ul>';
 
   return array('#markup' => $content);
+}
+
+/**
+ * Ajax callback for latest records list from hook_menu,
+ */
+function curios_latest_records_ajax($page_callback_result) {
+  print drupal_render($page_callback_result);
+  drupal_page_footer();
 }
 
 /**

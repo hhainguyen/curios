@@ -150,6 +150,12 @@ function curios_menu() {
     'type' => MENU_CALLBACK,
     'page arguments' => array(3,4),
   );
+  $items['curios/latest-records'] = array(
+    'page callback' => 'curios_latest_records',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('curios manage repository'),
+    'delivery callback' => 'curios_latest_records_ajax',
+  );
 
   return $items;
 }

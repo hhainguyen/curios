@@ -196,6 +196,7 @@ function curios_update_form($form, $form_state, $resource_type, $subject_id, $vi
   _curios_update_fieldset_record_meta($form, $config, $rdf_mapping, $resource_type, $subject_id);
   _curios_update_fieldset_existing_relationships($form, $form_state, $rdf_mapping, $resource_type, $subject_id, $relationship_options);
   _curios_update_fieldset_new_relationships($form, $form_state, $rdf_mapping, $relationship_options);
+  _curios_update_fieldset_latest_records($form, $form_state);
   _curios_update_fieldset_delete($form, $config, $rdf_mapping);
 
   // Submit button.
@@ -549,6 +550,17 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
   } else {
     $form['relationship_fieldset'][] = array('#markup' => "<p>No relationship fields have been defined for this record type.</p>");
   }
+}
+
+function _curios_update_fieldset_latest_records(&$form, $form_state) {
+  $form['latest_records_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Recently Created Records'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['latest_records_fieldset'][] = array('#markup' =>
+    '<input type="button" onclick="jQuery(\'#edit-latest-records-fieldset .fieldset-wrapper\').load(\'/curios/latest-records\');" value="Load recently created records" />');
 }
 
 function _curios_update_fieldset_delete(&$form, $config, $rdf_mapping) {
