@@ -1302,7 +1302,23 @@ $relationship_assignments['subjects'][] = array(
 );
 $relationship_assignments['subjects'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:Resource',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['subjects'][] = array(
    'property' => 'hc:owned',
@@ -1368,7 +1384,20 @@ $relationship_assignments['boats'][] = array(
 );
 $relationship_assignments['boats'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+   ),
 );
 $relationship_assignments['boats'][] = array(
    'property' => 'hc:ownedBy',
@@ -1393,7 +1422,20 @@ $relationship_assignments['buildings_and_public_amenities'][] = array(
 );
 $relationship_assignments['buildings_and_public_amenities'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+   ),
 );
 $relationship_assignments['buildings_and_public_amenities'][] = array(
    'property' => 'hc:locatedAt',
@@ -1425,7 +1467,23 @@ $relationship_assignments['businesses'][] = array(
 );
 $relationship_assignments['businesses'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['businesses'][] = array(
    'property' => 'hc:owned',
@@ -1470,7 +1528,22 @@ $relationship_assignments['crofts_and_residences'][] = array(
 );
 $relationship_assignments['crofts_and_residences'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['crofts_and_residences'][] = array(
    'property' => 'hc:locatedAt',
@@ -1504,7 +1577,22 @@ $relationship_assignments['gaelic_verse'][] = array(
 );
 $relationship_assignments['gaelic_verse'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 
 /* Historical Events */
@@ -1522,7 +1610,23 @@ $relationship_assignments['historical_events'][] = array(
 );
 $relationship_assignments['historical_events'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 
 /* Landmarks and Archaeological Sites */
@@ -1556,7 +1660,23 @@ $relationship_assignments['landmarks_and_archaeological_sites'][] = array(
 );
 $relationship_assignments['landmarks_and_archaeological_sites'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['landmarks_and_archaeological_sites'][] = array(
    'property' => 'hc:locatedAt',
@@ -1618,7 +1738,22 @@ $relationship_assignments['locations'][] = array(
 );
 $relationship_assignments['locations'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['locations'][] = array(
    'property' => 'hc:locatedAt',
@@ -1662,7 +1797,19 @@ $relationship_assignments['natural_landscape_features'][] = array(
 );
 $relationship_assignments['natural_landscape_features'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+   ),
 );
 $relationship_assignments['natural_landscape_features'][] = array(
    'property' => 'hc:locatedAt',
@@ -1706,7 +1853,23 @@ $relationship_assignments['objects_and_artefacts'][] = array(
 );
 $relationship_assignments['objects_and_artefacts'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:Resource',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['objects_and_artefacts'][] = array(
    'property' => 'hc:locatedAt',
@@ -1739,7 +1902,22 @@ $relationship_assignments['organisations'][] = array(
 );
 $relationship_assignments['organisations'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 
 /* People */
@@ -1860,7 +2038,24 @@ $relationship_assignments['people'][] = array(
 );
 $relationship_assignments['people'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:Person',
+      'hc:Resource',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['people'][] = array(
    'property' => 'hc:owned',
@@ -1917,7 +2112,11 @@ $relationship_assignments['resources'][] = array(
 );
 $relationship_assignments['resources'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:ObjectOrArtefact',
+      'hc:Person',
+      'hc:Resource',
+   ),
 );
 
 /* Stories, Reports and Traditions */
@@ -1935,7 +2134,23 @@ $relationship_assignments['stories_reports_and_traditions'][] = array(
 );
 $relationship_assignments['stories_reports_and_traditions'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Boat',
+      'hc:BuildingOrPublicAmenity',
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:NaturalLandscapeFeature',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 
 /* Vehicles */
@@ -1953,7 +2168,19 @@ $relationship_assignments['vehicles'][] = array(
 );
 $relationship_assignments['vehicles'][] = array(
    'property' => 'hc:associatedWith',
-   'target' => $all_records,
+   'target' => array(
+      'hc:Business',
+      'hc:CroftOrResidence',
+      'hc:GaelicVerse',
+      'hc:HistoricalEvent',
+      'hc:LandmarkOrArchaeologicalSite',
+      'hc:Location',
+      'hc:ObjectOrArtefact',
+      'hc:Organisation',
+      'hc:Person',
+      'hc:StoryReportOrTradition',
+      'hc:Vehicle',
+   ),
 );
 $relationship_assignments['vehicles'][] = array(
    'property' => 'hc:ownedBy',
@@ -1976,10 +2203,6 @@ $relationship_assignments['image_details'][] = array(
    'property' => 'hc:isShownHere',
    'target' => $all_records,
 );
-$relationship_assignments['image_details'][] = array(
-   'property' => 'hc:associatedWith',
-   'target' => $all_records,
-);
 
 /* Sound Files */
 $relationship_assignments['sound_files'][] = array(
@@ -1992,9 +2215,5 @@ $relationship_assignments['sound_files'][] = array(
 );
 $relationship_assignments['sound_files'][] = array(
    'property' => 'hc:isHeardHere',
-   'target' => $all_records,
-);
-$relationship_assignments['sound_files'][] = array(
-   'property' => 'hc:associatedWith',
    'target' => $all_records,
 );
