@@ -91,7 +91,7 @@ function curios_resource_type_load($resource_name) {
 function curios_manage_insert_form($form, &$form_state) {
   $form = array();
 
-  $form['type'] = __curios_resources_form_select();
+  $form['type'] = curios_resources_form_select();
   $form['submit'] = array('#type' => 'submit', '#value' => 'Next');
   
   return $form;
@@ -117,7 +117,7 @@ function curios_manage_insert_form_submit($form, &$form_state) {
 function curios_manage_update_form($form, &$form_state) {
   $form = array();
 
-  $form['type'] = __curios_resources_form_select();
+  $form['type'] = curios_resources_form_select();
   $form['subject_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Subject Id'),
@@ -163,13 +163,14 @@ function curios_delete_form_submit($form, &$form_state) {
 /**
  * Generates a form select element from the browsing classes in the configuration.
  */
-function __curios_resources_form_select() {
+function curios_resources_form_select() {
   $config = curios_configuration();
   $options = array();
   $resources = entity_load('sparql_views_resource_type');
 
   foreach ($resources as $entity) {
-    if ($entity->name == $config->getDefaultResourceId()) {
+    if ($entity->name == $config->getDefaultResourceId() ||
+        $config->getResource($entity->name) == NULL) {
       continue;
     }
     $options[$entity->name] = $entity->label;
