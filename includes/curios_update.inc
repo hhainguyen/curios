@@ -62,8 +62,8 @@ function curios_admin_tools_page() {
 /**
  * Genearte HTML for latest records list.
  */
-function curios_latest_records() {
-  $latest_records = _curios_latest_record_identifiers(15);
+function curios_latest_records($n = 15) {
+  $latest_records = _curios_latest_record_identifiers($n);
 
   $content = '';
   $content .= '<h2>Recently created records:</h2>';

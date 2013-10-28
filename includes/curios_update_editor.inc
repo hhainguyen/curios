@@ -560,7 +560,7 @@ function _curios_update_fieldset_latest_records(&$form, $form_state) {
     '#collapsed' => TRUE,
   );
   $form['latest_records_fieldset'][] = array('#markup' =>
-    '<input type="button" onclick="jQuery(\'#edit-latest-records-fieldset .fieldset-wrapper\').load(\'/curios/latest-records\');" value="Load recently created records" />');
+    '<input type="button" onclick="jQuery(\'#edit-latest-records-fieldset .fieldset-wrapper\').load(\'/curios/latest-records/10\');" value="Load recently created records" />');
 }
 
 function _curios_update_fieldset_delete(&$form, $config, $rdf_mapping) {
