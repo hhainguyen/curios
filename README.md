@@ -74,7 +74,7 @@ Installation Notes
     * Click *Load Configuration*.
   7. Enable CURIOS Theme and set as default via admin/appearance.
   8. Enable *Description Link Filter* for *Filtered HTML* and *Full HTML* via admin/config/content/formats.
-  9. Add 'www.dotrural.ac.uk' to the Imagecache External whitelist (admin/config/media/imagecache_external).
+  9. Add `www.dotrural.ac.uk` to the Imagecache External whitelist (admin/config/media/imagecache_external).
   10. Download and install the standalone CKEditor to the libraries folder as described in:
     http://docs.cksource.com/CKEditor_for_Drupal/Open_Source/Drupal_7/Installation
   11. Optional: enable *Cache pages for anonymous users* via admin/config/development/performance.
