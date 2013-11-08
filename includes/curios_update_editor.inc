@@ -285,11 +285,13 @@ function _curios_update_fieldset_fields(&$form, $config, $rdf_mapping, $view_res
         break;
       case 'autocomplete':
         $autocomplete = TRUE;
+	curios_update_form_add_text_field($form, $resource_type, $instance, $rdf_mapping,  $view_result, $autocomplete);
+	break;
       case 'text':
       case 'integer':
       default:
-        $autocomplete = isset($autocomplete) ? $autocomplete : FALSE;
-        curios_update_form_add_text_field($form, $resource_type, $instance, $rdf_mapping,  $view_result, $autocomplete);
+        $autocomplete =  FALSE;
+	curios_update_form_add_text_field($form, $resource_type, $instance, $rdf_mapping,  $view_result, $autocomplete);	
         break;
     }
 
@@ -319,6 +321,12 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
     '#type' => 'hidden',
     '#value' => $value,
   );
+  if ($instance['field_name']=='hc_northing')
+      {
+	 drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=BA08531D8339984EE0405F0AC86026A9');
+	 drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-geo-handler.js');
+	 $form['optional_fields']['hc_northing']['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="markerPosition"></div><div id="map"></div>';
+      }
 }
 
 function curios_update_form_add_daterange_field(&$form, $resource_type, $instance, $rdf_mapping, $view_result, $date_range_position) {
