@@ -321,11 +321,11 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
     '#type' => 'hidden',
     '#value' => $value,
   );
-  if ($instance['field_name']=='hc_northing')
+  if ($instance['field_name']=='hc_easting')
       {
 	 drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=BA08531D8339984EE0405F0AC86026A9');
 	 drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-geo-handler.js');
-	 $form['optional_fields']['hc_northing']['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="markerPosition"></div><div id="map"></div>';
+	 $form['optional_fields']['hc_easting']['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="markerPosition"></div><div id="map"></div>';
       }
 }
 
