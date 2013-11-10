@@ -23,7 +23,53 @@
  * Returns a human readble representation of a DateRange.
  */
 function curios_format_daterange($dateFrom, $dateTo) {
-  return 'Between ' .  curios_format_datetime($dateFrom) . ' and ' . curios_format_datetime($dateTo);
+  // remove T24:00:00 format from datetime => to well-form date
+  // FIXED: 32bit strtoTime avoided by string processing.
+  $arrDateFrom = explode('-',preg_replace('/T.+$/', '', $dateFrom));
+  $arrDateTo = explode('-',preg_replace('/T.+$/', '', $dateTo));
+  $strYearFrom = $arrDateFrom[0];
+  $strYearTo = $arrDateTo[0];
+  $strMonthFrom = $arrDateFrom[1];
+  $strMonthTo = $arrDateTo[1];
+  $strDateFrom = $arrDateFrom[2];
+  $strDateTo = $arrDateTo[2];
+
+  $dateMonthFrom = $strDateFrom.'-'.$strMonthFrom;
+  $dateMonthTo = $strDateTo.'-'.$strMonthTo;
+
+  $strDMYFrom = $dateMonthFrom.'-'.$strYearFrom;
+  $strDMYTo = $dateMonthTo.'-'.$strYearTo;
+  // same date 
+  if (strcmp($strDMYFrom,$strDMYTo) == 0)
+	return $strDMYFrom;
+  
+  if (strcmp($strYearFrom,$strYearTo) == 0)
+  {	//same year
+	if (strcmp($dateMonthFrom,'01-01')==0 && strcmp($dateMonthTo,'31-12')==0) 
+		return 	$strYearFrom;
+	if (strcmp($dateMonthFrom,'01-03')==0 && strcmp($dateMonthTo,'31-05')==0)
+		return 	('Spring ' . $strYearFrom);
+	if (strcmp($dateMonthFrom,'01-06')==0 && strcmp($dateMonthTo,'31-08')==0)
+		return 	('Summer ' . $strYearFrom);
+	if (strcmp($dateMonthFrom,'01-09')==0 && strcmp($dateMonthTo,'30-11')==0)
+		return 	('Autumn ' . $strYearFrom);
+  }
+  if (strcmp($dateMonthFrom,"01-01")==0 && strcmp($dateMonthTo,"31-12")==0) 
+  {
+	// same decade
+	if (strcmp(substr($strYearFrom,0,-1),substr($strYearTo,0,-1)) == 0) 
+		return substr($strYearFrom,0,-1).'0s';
+  	// same century
+	if (strcmp(substr($strYearFrom,0,2),substr($strYearTo,0,2)) == 0) 
+		return strval(intval(substr($strYearFrom,0,2))-1).'th century';
+  }
+   // winter, lasting until next year
+   if ( (strcmp($dateMonthFrom,'01-12') == 0) &&
+	(strcmp($dateMonthTo,'28-02') == 0) &&
+	(intval($strYearFrom) == intval($strYearTo)-1))
+		return 	'Winter ' . $strYearFrom;
+
+  return 'Between ' .  $strDMYFrom  . ' and ' . $strDMYTo;
 }
 
 /**
