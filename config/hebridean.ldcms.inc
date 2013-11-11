@@ -351,6 +351,11 @@ $fields[] = array(
    'label'    => 'Date',
    'type'     => 'daterange',
 );
+$fields[] = array(
+   'property' => 'hc:editorNotes',
+   'label'    => 'Editor notes',
+   'type'     => 'text',
+);
 
 /* Relationship Fields */
 
@@ -708,7 +713,7 @@ $browsing_classes[] = array(
 );
 $browsing_classes[] = array(
    'name'  => 'landmarks_and_archaeological_sites',
-   'label' => 'Landmarks and Archaeological Sites',
+   'label' => 'Historical/ Archaeological Sites',
    'class' => 'hc:LandmarkOrArchaeologicalSite',
    'title' => 'hc:englishName',
    'description' => 'hc:description',
@@ -839,6 +844,7 @@ $field_assignments['subjects'] = array(
    'hc:URL',
    'hc:originator',
    'hc:originDate',
+   'hc:editorNotes',
 );
 $field_assignments['boats'] = array(
    'hc:englishName',
@@ -854,6 +860,7 @@ $field_assignments['boats'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['buildings_and_public_amenities'] = array(
    'hc:englishName',
@@ -869,6 +876,7 @@ $field_assignments['buildings_and_public_amenities'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['businesses'] = array(
    'hc:englishName',
@@ -883,6 +891,7 @@ $field_assignments['businesses'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['crofts_and_residences'] = array(
    'hc:englishName',
@@ -899,6 +908,7 @@ $field_assignments['crofts_and_residences'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['gaelic_verse'] = array(
    'hc:englishName',
@@ -911,6 +921,7 @@ $field_assignments['gaelic_verse'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['historical_events'] = array(
    'hc:englishName',
@@ -924,6 +935,7 @@ $field_assignments['historical_events'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['landmarks_and_archaeological_sites'] = array(
    'hc:englishName',
@@ -939,6 +951,7 @@ $field_assignments['landmarks_and_archaeological_sites'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['locations'] = array(
    'hc:englishName',
@@ -953,6 +966,7 @@ $field_assignments['locations'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['natural_landscape_features'] = array(
    'hc:englishName',
@@ -967,6 +981,7 @@ $field_assignments['natural_landscape_features'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['objects_and_artefacts'] = array(
    'hc:englishName',
@@ -980,6 +995,7 @@ $field_assignments['objects_and_artefacts'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['organisations'] = array(
    'hc:englishName',
@@ -992,6 +1008,7 @@ $field_assignments['organisations'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['people'] = array(
    'hc:englishName',
@@ -1009,6 +1026,7 @@ $field_assignments['people'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['resources'] = array(
    'hc:englishName',
@@ -1021,6 +1039,7 @@ $field_assignments['resources'] = array(
    'hc:sourceType',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['stories_reports_and_traditions'] = array(
    'hc:englishName',
@@ -1033,6 +1052,7 @@ $field_assignments['stories_reports_and_traditions'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['vehicles'] = array(
    'hc:englishName',
@@ -1046,6 +1066,7 @@ $field_assignments['vehicles'] = array(
    'hc:maintainedBySociety',
    'hc:subjectID',
    'hc:title',
+   'hc:editorNotes',
 );
 $field_assignments['image_details'] = array(
    'hc:ownedBySociety',
@@ -1059,6 +1080,7 @@ $field_assignments['image_details'] = array(
    'hc:URL',
    'hc:originator',
    'hc:originDate',
+   'hc:editorNotes',
 );
 $field_assignments['sound_files'] = array(
    'hc:ownedBySociety',
@@ -1072,6 +1094,7 @@ $field_assignments['sound_files'] = array(
    'hc:URL',
    'hc:originator',
    'hc:originDate',
+   'hc:editorNotes',
 );
 
 /* Relationship Assignments */
@@ -1649,7 +1672,7 @@ $relationship_assignments['historical_events'][] = array(
    ),
 );
 
-/* Landmarks and Archaeological Sites */
+/* Historical/ Archaeological Sites */
 $relationship_assignments['landmarks_and_archaeological_sites'][] = array(
    'property' => 'hc:isPartOfSite',
    'target' => 'hc:LandmarkOrArchaeologicalSite',
