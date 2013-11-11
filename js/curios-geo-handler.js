@@ -30,8 +30,8 @@ var osMap, dragControl, marker, map2Marker;
 		$('#map').css("width", "100%");
 		$('#map').css("height", "500px"); 
 		var E = $("input[name=old_hc_easting]").val(), N = $("input[name=old_hc_northing]").val();
-		if (isNaN(E)) E = 141314;
-		if (isNaN(N)) N = 917410;
+		if ((E=="")||isNaN(E)) E = 141314;
+		if ((N=="")||isNaN(N)) N = 917410;
 		var initialCenterPoint = new OpenSpace.MapPoint(E,N);
 		createMap(initialCenterPoint);
                 osMap.createMarker(initialCenterPoint);
@@ -42,8 +42,8 @@ var osMap, dragControl, marker, map2Marker;
             });
 	   $('input[name=hc_northing],input[name=hc_easting]').live('blur', function(event) {
 		var E = $("input[name=hc_easting]").val(), N = $("input[name=hc_northing]").val();
-		if (isNaN(E)) E = 141314;
-		if (isNaN(N)) N = 917410;
+		if ((E=="")||isNaN(E)) E = 141314;
+		if ((N=="")||isNaN(N)) N = 917410;
 		var newCenterPoint = new OpenSpace.MapPoint(E,N);
 		osMap.getMarkerLayer().clearMarkers();
 		osMap.createMarker(newCenterPoint);
@@ -64,7 +64,7 @@ var osMap, dragControl, marker, map2Marker;
 function createMap(initialCenterPoint) {
   
 	osMap = new OpenSpace.Map("map");
-	osMap.setCenter(initialCenterPoint, 5);
+	osMap.setCenter(initialCenterPoint, 3);
 }
 
 
