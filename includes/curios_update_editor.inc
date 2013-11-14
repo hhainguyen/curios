@@ -519,7 +519,7 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
   );
   $form['relationship_fieldset'][] = array('#markup' => '<p>To add a relationship, select the relationship type
       from the drop down menu and enter the SubjectId of the record in the textbox.</p>');
-
+   
   if (!empty($relationship_options)) { // If this resource has relationship fields.
     if (empty($form_state['storage']['relationship_group_count'])) {
       $form_state['storage']['relationship_group_count'] = 1;
@@ -529,6 +529,7 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
     }
 
     $relationship_group_count = $form_state['storage']['relationship_group_count'];
+
     for ($i = 0; $i < $relationship_group_count; $i++) {
       $current_group_name = 'relationship-'.$i;
 
@@ -583,6 +584,7 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
   } else {
     $form['relationship_fieldset'][] = array('#markup' => "<p>No relationship fields have been defined for this record type.</p>");
   }
+
 }
 
 function _curios_update_fieldset_latest_records(&$form, $form_state) {
@@ -629,8 +631,13 @@ function curios_update_relationship_listing_undo($form, &$form_state) {
 }
 /** Ajax callback. */
 function curios_update_relationship_input_add($form, &$form_state) {
+//FIXED: "add twice" error. When this is called, then we can be sure that there is at least 1 relationship from that subject.
+ if (empty($form_state['storage']['relationship_group_count'])) {
+      $form_state['storage']['relationship_group_count'] = 1;
+    }
   $form_state['storage']['relationship_group_count'] += 1;
   $form_state['rebuild'] = TRUE;
+
 }
 /** Ajax callback. */
 function curios_update_relationship_input_callback($form, $form_state) {
@@ -659,6 +666,7 @@ function curios_update_form_validate($form, &$form_state) {
   array_pop($relationships);
 
   foreach ($relationships as $field_name=>$relationship) {
+ 
     $error_field_name = "relationship_fieldset][$field_name][value";
 
     if (!__curios_valid_id($relationship['value'])) {
