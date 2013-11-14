@@ -57,6 +57,10 @@ class LDCMSConfiguration {
   private $default_resource_id = NULL;
   private $default_namespace = NULL;
 
+  private $map_settings = NULL;
+
+  private $editornotes_field_id = NULL;
+
   function getCMSID($ontology_entity, $is_curie = TRUE) {  // id function
     return $is_curie ?
       __curios_cmsid_from_curie($ontology_entity, $this) :
@@ -155,8 +159,14 @@ class LDCMSConfiguration {
   function setPublishedFieldId($published_field_id) { $this->published_field_id = $published_field_id; }
   function getPublishedFieldId() { return $this->published_field_id; }
 
+  function setEditorNotesFieldId($editornotes_field_id) { $this->editornotes_field_id = $editornotes_field_id; }
+  function getEditorNotesFieldId() { return $this->editornotes_field_id; }
+
   function setIdentifierFieldId($identifier_field_id) { $this->identifier_field_id = $identifier_field_id; }
   function getIdentifierFieldId() { return $this->identifier_field_id; }
+  
+  function setMapSettings($map_settings) { $this->map_settings = $map_settings; }
+  function getMapSettings() { return $this->map_settings; }
 
   function toString_dump() {
     var_dump($this->resourceToViewMap);

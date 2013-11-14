@@ -1113,6 +1113,19 @@ function __curios_generate_display_record_meta_default(&$view, &$view_spec, $bas
   $handler->display->display_options['fields'][$published_field_name]['hide_empty'] = 1;
   $handler->display->display_options['fields'][$published_field_name]['required'] = 0;
 
+  // editor notes
+  $editor_notes_field_name = $resource_name.'_'.$config->getEditorNotesFieldId();
+  $editor_notes_field = $config->getField($config->getEditorNotesFieldId());
+  $handler->display->display_options['fields'][$editor_notes_field_name]['id'] = $editor_notes_field_name;
+  $handler->display->display_options['fields'][$editor_notes_field_name]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$editor_notes_field_name]['field'] = $editor_notes_field_name;
+  $handler->display->display_options['fields'][$editor_notes_field_name]['label'] = __format_name($editor_notes_field->getLabel());
+  $handler->display->display_options['fields'][$editor_notes_field_name]['element_label_type'] = 'strong';
+  $handler->display->display_options['fields'][$editor_notes_field_name]['element_label_colon'] = 1;
+  $handler->display->display_options['fields'][$editor_notes_field_name]['element_default_classes'] = 1;
+  $handler->display->display_options['fields'][$editor_notes_field_name]['hide_empty'] = 1;
+  $handler->display->display_options['fields'][$editor_notes_field_name]['required'] = 0;
+
   // Contextual filters.
   __curios_uri_filter($handler, $view, $view_spec);
   __curios_rdf_type_filter($handler, $view, $view_spec);

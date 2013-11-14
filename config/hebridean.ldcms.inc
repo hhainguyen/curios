@@ -40,6 +40,7 @@ $options = array(
   'owner_property' => 'hc:ownedBySociety',
   'maintainer_property' => 'hc:maintainedBySociety',
   'published_property' => 'hc:approvedForPub',
+  'editor_notes_property' => 'hc:editorNotes',
 
   // Image details for gallery displays.
   'image_class' => 'hc:ImageFile',
@@ -50,6 +51,14 @@ $options = array(
   'date_range_class' => 'hc:DateRange',
   'date_range_from' => 'hc:dateFrom',
   'date_range_to' => 'hc:dateTo',
+  // Settings for map
+  'map_settings' => array (
+   // should be updated according to the property name defined below for coordinates
+   'map_x_prop' =>'hc:easting',
+   'map_y_prop' =>'hc:northing',
+   // the map will appear after this field (choose the value of either 'map_x_prop' and 'map_y_prop')
+   'map_position'=> 'hc:easting',
+  ),
 );
 
 

@@ -100,6 +100,19 @@ function __curios_configuration_options($config, $config_spec) {
   $prefixToNS = $config->getPrefixToNamespaceMap();
   $default_namespace = $prefixToNS[$config_spec['options']['default_prefix']];
   $config->setDefaultNamespace($default_namespace);
+
+  // Editor Notes field.
+  $editornotes_field_id= $config->getCMSID($config_spec['options']['editor_notes_property']);
+  $config->setEditorNotesFieldId($editornotes_field_id);
+
+   // Map Settings.
+  $map_settings = $config_spec['options']['map_settings'];
+
+  foreach ($map_settings as $key => $value)
+  {    // get CMS valid machine name for fields
+	$map_settings[$key]= $config->getCMSID($value);
+  }
+  $config->setMapSettings($map_settings);
 }
 
 /**
@@ -153,6 +166,7 @@ function __curios_configuration_resources_views($config, $config_spec) {
   $owner_field = $config->getField($config->getOwnerFieldId());
   //$maintainer_field = $config->getField($config->getMaintainerFieldId());
   $published_field = $config->getField($config->getPublishedFieldId());
+  $editor_notes_field = $config->getField($config->getEditorNotesFieldId());
 
   // DateRange resource mapping.
   $date_range_resource = $config->getDateRangeResource();
@@ -211,6 +225,7 @@ function __curios_configuration_resources_views($config, $config_spec) {
     $resource->addField($owner_field);
     //$resource->addField($maintainer_field);
     $resource->addField($published_field);
+    $resource->addField($editor_notes_field);
 
     // Add relationships.
     // __curios_sparql_fetch_relationships($browsing_class, $config);
@@ -231,7 +246,10 @@ function __curios_configuration_resources_views($config, $config_spec) {
     // Attach fields and relationships to the view spec.
     $field_ids = array();
     foreach ($resource->getDataFields() as $field) {
-      if ($field->getId() == $published_field->getId()) {
+    // remove published and editor notes field from view spec
+    // TODO: this was from the old version and very hacky, needs to be fixed for flexibility
+      if ($field->getId() == $published_field->getId()
+	  || $field->getId() == $editor_notes_field->getId()) {
         continue;
       }
 

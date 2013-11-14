@@ -35,7 +35,7 @@ function curios_update_form_page($resource_type, $subject_id = NULL) {
   }
 
   $view_result = _curios_execute_properties_view($resource_type->name, $subject_id);
-
+  
   if (curios_is_empty_view_result($view_result)) {
     drupal_set_message("Unknown record or unable to retrieve: $resource_type->label; ID: $subject_id.", 'error', FALSE);
     return curios_update_page();
@@ -99,7 +99,6 @@ function _curios_execute_record_meta_view($resource_name, $subject_id) {
   $resource_config = $config->getResource($resource_name);
   $view_config_id = $config->getViewIdForResource($resource_name);
   $view_config = $config->getViewSpec($view_config_id);
-
   return views_get_view_result($view_config->getMachineName(), 'record-meta', $subject_id, $resource_config->getRDFType());
 }
 
@@ -230,7 +229,11 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
   $published_field = $config->getField($config->getPublishedFieldId());
   $views_published_field = $resource_type->name.'_'.$published_field->getId();
   $published_value = isset($view_result[0]->$views_published_field) ? $view_result[0]->$views_published_field : '';
-
+ 
+  $editor_notes_field = $config->getField($config->getEditorNotesFieldId());
+  $views_editor_notes_field  = $resource_type->name.'_'.$editor_notes_field->getId();
+  $editor_notes_value  = isset($view_result[0]->$views_editor_notes_field ) ? $view_result[0]->$views_editor_notes_field  : '';
+  
   $form['record_meta'] = array(
     '#type' => 'fieldset',
     '#title' => t('Record Maintainance'),
@@ -260,6 +263,17 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
   $form['old_'.$published_field->getId()] = array(
     '#type' => 'hidden',
     '#value' => $published_value,
+  );
+  $form['record_meta'][$editor_notes_field->getId()] = array(
+    '#type' => 'textarea',
+    '#title' => t($editor_notes_field->getLabel()),
+    '#required' => FALSE,
+    '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$editor_notes_field->getId()]['predicates'][0] .')</span>',
+    '#default_value' => $editor_notes_value,
+  );
+  $form['old_'.$editor_notes_field->getId()] = array(
+    '#type' => 'hidden',
+    '#value' => $editor_notes_value,
   );
 }
 
@@ -321,12 +335,23 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
     '#type' => 'hidden',
     '#value' => $value,
   );
-  if ($instance['field_name']=='hc_easting')
-      {
-	 drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=EA4A2D87E8D473D6E0430B6CA40A9AB7');
+  if (trim(variable_get('osmap_api_key'))!='')
+  {  
+    $config = curios_configuration();
+    $map_settings = $config->getMapSettings();
+
+    if ($instance['field_name']===$map_settings['map_x_prop'])
+      {  drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key='.variable_get('osmap_api_key'));
 	 drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-geo-handler.js');
-	 $form['optional_fields']['hc_easting']['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="markerPosition"></div><div id="map"></div>';
+         drupal_add_js(array('curiosMap' => array('mapXName' => $map_settings['map_x_prop'], 
+						  'mapYName' => $map_settings['map_y_prop'],
+						  'defaultE' => variable_get('default_easting'),
+						  'defaultN' => variable_get('default_northing'),
+   						  'defaultZoom' => variable_get('default_zoom_level')
+						  	)), 'setting');
+	 $form['optional_fields'][$map_settings['map_position']]['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="map"></div>';
       }
+  }
 }
 
 function curios_update_form_add_daterange_field(&$form, $resource_type, $instance, $rdf_mapping, $view_result, $date_range_position) {

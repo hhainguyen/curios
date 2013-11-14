@@ -382,5 +382,6 @@ function __is_special_field($field_instance, $config) {
   return $field_instance['field_name'] == $config->getImageRelationshipFieldId() ||
          $field_instance['field_name'] == $config->getOwnerFieldId() ||
          $field_instance['field_name'] == $config->getMaintainerFieldId() ||
-         $field_instance['field_name'] == $config->getPublishedFieldId();
+         $field_instance['field_name'] == $config->getPublishedFieldId()||
+	 $field_instance['field_name'] == $config->getEditorNotesFieldId();
 }

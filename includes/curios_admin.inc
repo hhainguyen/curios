@@ -20,6 +20,7 @@
  */
 
 require('curios_field_install.inc');
+require_once('curios_ldcms.inc');
 
 /**
  * Implements hook_admin.
@@ -30,7 +31,7 @@ function curios_admin() {
   $form = array();
 
   $config_files = _curios_config_file_list();
-
+  
   $form['config_files'] = array(
     '#type' => 'select',
     '#title' => t('LDCMS configuration file'),
@@ -44,7 +45,6 @@ function curios_admin() {
   $form['fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('Advanced Options'),
-    '#weight' => 5,
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
@@ -74,8 +74,76 @@ function curios_admin() {
     '#value' => 'Load Configuration',
   );
 
+
+ $form['map_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Ordnance Survey Map Settings for LDCMS'),
+    '#weight' => 2,
+    '#collapsible' => TRUE,
+  );
+
+ // default value is for curios.abdn.ac.uk
+	 $form['map_settings']['osmap_api_key'] = array(
+	  '#type' => 'textfield', 
+	  '#title' => t('Ordnance Survey Map API key'), 
+	  '#size' => 60, 
+	  '#default_value' => variable_get('osmap_api_key','BA08531D8339984EE0405F0AC86026A9'),
+	  '#maxlength' => 128, 
+	  '#required' => FALSE,
+	  '#description' => t('(Optional) Ordnance Survey OpenSpace API key for mapping service. <i>Go to Ordnance Survey website to register your domain (eg, example.com) and get the key</i>. <b>If you don\'t need mapping services, leave this field blank.</b>'),
+	 );
+
+	$form['map_settings']['default_northing'] = array(
+	  '#type' => 'textfield', 
+	  '#title' => t('Default Northing for Ordnance Survey Map'), 
+	  '#size' => 60, 
+	  '#default_value' => variable_get('default_northing','808250'),
+	  '#maxlength' => 128, 
+	  '#required' => FALSE,
+	  '#description' => t('(Optional) Current default northing is for Old Aberdeen (808250).'),
+	 );
+	$form['map_settings']['default_easting'] = array(
+	  '#type' => 'textfield', 
+	  '#title' => t('Default Easting for Ordnance Survey Map'), 
+	  '#size' => 60, 
+	  '#default_value' => variable_get('default_easting','393950'),
+	  '#maxlength' => 128, 
+	  '#required' => FALSE,
+	  '#description' => t('(Optional) Current default easting is for Old Aberdeen (393950).'),
+	 );
+	$form['map_settings']['default_zoom_level'] = array(
+	  '#type' => 'textfield', 
+	  '#title' => t('Default Zoom Level for Map'), 
+	  '#size' => 60, 
+	  '#default_value' => variable_get('default_zoom_level','3'),
+	  '#maxlength' => 128, 
+	  '#required' => FALSE,
+	  '#description' => t('(Optional) Current default zoom level is 3. Increase to zoom in and decrease to zoom out.'),
+	 );
+
+	  $form['map_settings']['save_setings'] = array(
+	    '#type' => 'submit',
+	    '#value' => 'Save Settings',
+	    '#submit' => array('curios_admin_map_settings_submit'),
+	  );
+
+
   return $form;
 }
+
+/**
+ * Implements settings_submit callback
+ * 
+ */
+function curios_admin_map_settings_submit($form, &$form_state) {
+  // set new key for the map
+  variable_set('osmap_api_key',$form_state['values']['osmap_api_key']);
+  variable_set('default_northing',$form_state['values']['default_northing']);
+  variable_set('default_easting',$form_state['values']['default_easting']);
+  variable_set('default_zoom_level',$form_state['values']['default_zoom_level']);
+  drupal_set_message(t('LDCMS Map settings have been saved.'));
+}
+
 
 /**
  * Implements hook_admin_submit.
@@ -83,6 +151,7 @@ function curios_admin() {
  * Submit handler, triggers (re)loading of the configuration, creation of fields, resources etc.
  */
 function curios_admin_submit($form, &$form_state) {
+
   if ($form_state['values']['ldcms-disable']) { // Disable LDCMS only.
     drupal_set_message('LDCMS disabled.');
     variable_del('ldcms_installed');
