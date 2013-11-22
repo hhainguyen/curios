@@ -28,6 +28,10 @@ function curios_endpoints() {
       'query' => 'http://localhost:3030/dataset/query',
       'update' => 'http://localhost:3030/dataset/update',
     ),
+    'noinference' => array(
+      'query' => 'http://localhost:3030/ds/query',
+      'update' => 'http://localhost:3030/ds/update',
+    ),
   );
 
   return $endpoints;
@@ -44,19 +48,28 @@ function __curios_sparql_query($query, $endpoint = 'dataset') {
   if ($rs != NULL) {
     return $rs;
   } else {
-    drupal_set_message("SPARQL endpoint error", 'error');
+    drupal_set_message("SPARQL endpoint error for "+$query, 'error');
   }
 }
 
 /**
- * Updates the SPARQL endpoint.
+ * Updates the SPARQL endpoint. By default the endpoint should be the non-inference service
  */
-function __curios_sparql_update($query, $endpoint = 'dataset') {
+function __curios_sparql_update($query, $endpoint = 'noinference') {
+
+
   $endpoints = curios_endpoints();
   $query = __curios_sparql_append_prefixes($query);
   $rs = sparql_request($query, (object)array('uri' => $endpoints[$endpoint]['update']));
 
-  return ($rs != NULL);
+   if ($rs != NULL)
+  {	// if it is not a "dummy" update and the current status of dataset is up-to-date,
+	// set the current status to not up-to-dated. 
+	if ($endpoint!='dataset'&&variable_get('curios_inference_updated',TRUE))	
+		variable_set('curios_inference_updated',FALSE);	
+	return TRUE;
+  }
+  else FALSE;
 }
 
 /**
@@ -150,8 +163,8 @@ function _curios_subject_insert($rdf_type, $triples_insert) {
   $id_field = $config->getField($config->getIdentifierFieldId());
   $id_property = $id_field->getRDFPredicate();
 
-  $default_browsing_class = $config->getResource($config->getDefaultResourceId());
-  $default_class = $default_browsing_class->getBaseClass();
+ // $default_browsing_class = $config->getResource($config->getDefaultResourceId());
+ // $default_class = $default_browsing_class->getBaseClass();
 
   $query = <<<EOT
 INSERT {
@@ -162,7 +175,7 @@ INSERT {
   SELECT ?uri ?id {
     {
       SELECT ((MAX(?n) + 1) AS ?id) {
-        [] {$id_property} ?n ; a {$default_class} .
+        [] {$id_property} ?n .
       }
     }
     BIND(URI(CONCAT("{$namespace}", STR(?id))) as ?uri) .
@@ -170,9 +183,40 @@ INSERT {
 }
 EOT;
 
-  return __curios_sparql_update($query);
+  return __curios_sparql_update($query, 'dataset');
 }
 
+/**
+ * Send a dummy update to trigger reasoning in dataset service
+ */
+function _curios_trigger_inference(){
+
+ // only trigger reasoning service if the system is not up-to-dated.
+   if (!variable_get('curios_inference_updated',TRUE))
+{
+$query = <<<EOT
+PREFIX hc: <http://www.hebrideanconnections.com/hebridean.owl#>
+INSERT DATA {
+     hc:s  hc:p 1 };
+DELETE DATA {
+     hc:s  hc:p 1 } 
+EOT;
+  $success =  __curios_sparql_update($query,'dataset');
+  if (!$success)
+  {
+	watchdog('curios', 'Inference graph is not recomputed.');
+	return FALSE;
+  }
+  else {
+	variable_set('curios_inference_updated',TRUE);
+	return TRUE;
+	}
+ }
+ return FALSE;
+}
+/**
+ * This is to retrieve the max identifier as an ID for the newly created record, must be using the non-inference service
+ */
 function _curios_fetch_max_identifier() {
   $config = curios_configuration();
   $id_field = $config->getField($config->getIdentifierFieldId());
@@ -182,11 +226,11 @@ function _curios_fetch_max_identifier() {
   
 $query = <<<EOT
 SELECT (MAX(?n) AS ?id) {
-  [] {$id_property} ?n ; a {$default_class} .
+  [] {$id_property} ?n .
 }
 EOT;
 
-  $rs = __curios_sparql_query($query);
+  $rs = __curios_sparql_query($query,'dataset');
   if ($rs != NULL) {
     return $rs['result']['rows'][0]['id'];
   } else {

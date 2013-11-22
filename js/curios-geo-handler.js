@@ -1,7 +1,7 @@
 /*
  * curios-geo-handler.js
- *
- * Copyright (c) 2011-2013, University of Aberdeen. All rights reserved.
+ * 
+ * Copyright (c) 2011-2013, University of Aberdeen, Hai Nguyen (hai.nguyen@abdn.ac.uk). All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License as
@@ -61,7 +61,7 @@ var osMap, dragControl, marker, mapMarker;
 	function createMap(initialCenterPoint) {
 	  
 		osMap = new OpenSpace.Map("map");
-		osMap.setCenter(initialCenterPoint, 3);
+		osMap.setCenter(initialCenterPoint, defaultZoom);
 	}
 
 

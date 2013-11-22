@@ -2,7 +2,7 @@
 /*
  * curios_admin.inc
  *
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk), Hai Nguyen (hai.nguyen@abdn.ac.uk)
  * University of Aberdeen. All rights reserved.
  * 
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -87,7 +87,7 @@ function curios_admin() {
 	  '#type' => 'textfield', 
 	  '#title' => t('Ordnance Survey Map API key'), 
 	  '#size' => 60, 
-	  '#default_value' => variable_get('osmap_api_key','BA08531D8339984EE0405F0AC86026A9'),
+	  '#default_value' => variable_get('curios_osmap_api_key','BA08531D8339984EE0405F0AC86026A9'),
 	  '#maxlength' => 128, 
 	  '#required' => FALSE,
 	  '#description' => t('(Optional) Ordnance Survey OpenSpace API key for mapping service. <i>Go to Ordnance Survey website to register your domain (eg, example.com) and get the key</i>. <b>If you don\'t need mapping services, leave this field blank.</b>'),
@@ -97,7 +97,7 @@ function curios_admin() {
 	  '#type' => 'textfield', 
 	  '#title' => t('Default Northing for Ordnance Survey Map'), 
 	  '#size' => 60, 
-	  '#default_value' => variable_get('default_northing','808250'),
+	  '#default_value' => variable_get('curios_default_northing','808250'),
 	  '#maxlength' => 128, 
 	  '#required' => FALSE,
 	  '#description' => t('(Optional) Current default northing is for Old Aberdeen (808250).'),
@@ -106,7 +106,7 @@ function curios_admin() {
 	  '#type' => 'textfield', 
 	  '#title' => t('Default Easting for Ordnance Survey Map'), 
 	  '#size' => 60, 
-	  '#default_value' => variable_get('default_easting','393950'),
+	  '#default_value' => variable_get('curios_default_easting','393950'),
 	  '#maxlength' => 128, 
 	  '#required' => FALSE,
 	  '#description' => t('(Optional) Current default easting is for Old Aberdeen (393950).'),
@@ -115,32 +115,59 @@ function curios_admin() {
 	  '#type' => 'textfield', 
 	  '#title' => t('Default Zoom Level for Map'), 
 	  '#size' => 60, 
-	  '#default_value' => variable_get('default_zoom_level','3'),
+	  '#default_value' => variable_get('curios_default_zoom_level','3'),
 	  '#maxlength' => 128, 
 	  '#required' => FALSE,
 	  '#description' => t('(Optional) Current default zoom level is 3. Increase to zoom in and decrease to zoom out.'),
 	 );
 
 	  $form['map_settings']['save_setings'] = array(
-	    '#type' => 'submit',
+    	    '#type' => 'submit',
 	    '#value' => 'Save Settings',
 	    '#submit' => array('curios_admin_map_settings_submit'),
 	  );
 
 
+ $form['ldcms_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General Settings for LDCMS'),
+    '#weight' => 3,
+    '#collapsible' => TRUE,
+  );
+ 
+     $form['ldcms_settings']['compute-inference'] = array(
+    '#value' => 'Re-compute inferences',
+    '#type' => 'submit', 
+    '#submit' => array('curios_admin_compute_inference_submit'),
+    '#prefix' => '<div style="color:'.((variable_get('curios_inference_updated')?'green':'red')).';">'.((variable_get('curios_inference_updated')?'The inference graph is up-to-dated':'There has been recent updates')).'.</div>',
+    '#suffix' => '<div class="description">'.t('Recompute the inference graph. This is automatically run after an interval as a cron-job, or you can mannually run it by clicking the button.').'</div>',
+  );
   return $form;
 }
 
+function curios_admin_compute_inference_submit($form, &$form_state) {
+  if (_curios_trigger_inference())
+	  drupal_set_message(t('The inference graph has been recomputed!'));
+  else
+	  drupal_set_message(t('The inference graph is up-to-dated. No recomputation required.'));
+}
+
+
 /**
- * Implements settings_submit callback
+ * Implements map settings_submit callback
  * 
  */
 function curios_admin_map_settings_submit($form, &$form_state) {
   // set new key for the map
-  variable_set('osmap_api_key',$form_state['values']['osmap_api_key']);
-  variable_set('default_northing',$form_state['values']['default_northing']);
-  variable_set('default_easting',$form_state['values']['default_easting']);
-  variable_set('default_zoom_level',$form_state['values']['default_zoom_level']);
+  if ($form_state['values']['osmap_api_key']!=variable_get('curios_osmap_api_key'))
+	  variable_set('curios_osmap_api_key',$form_state['values']['osmap_api_key']);
+  if ($form_state['values']['default_northing']!=variable_get('curios_default_northing')) 
+	  variable_set('curios_default_northing',$form_state['values']['default_northing']);
+  if ($form_state['values']['default_easting']!=variable_get('curios_default_easting')) 
+	  variable_set('curios_default_easting',$form_state['values']['default_easting']);
+  if ($form_state['values']['default_zoom_level']!=variable_get('curios_default_zoom_level')) 
+	  variable_set('curios_default_zoom_level',$form_state['values']['default_zoom_level']);
+
   drupal_set_message(t('LDCMS Map settings have been saved.'));
 }
 

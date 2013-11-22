@@ -75,7 +75,7 @@ function _curios_execute_properties_view($resource_name, $subject_id) {
   $view_config_id = $config->getViewIdForResource($resource_name);
   $view_config = $config->getViewSpec($view_config_id);
 
-  return views_get_view_result($view_config->getMachineName(), 'properties', $subject_id, $resource_config->getRDFType());
+  return views_get_view_result($view_config->getMachineName().'_update', 'properties', $subject_id, $resource_config->getRDFType());
 }
 
 /**
@@ -87,7 +87,7 @@ function _curios_execute_relationship_view($resource_name, $relationship_name, $
   $view_config_id = $config->getViewIdForResource($resource_name);
   $view_config = $config->getViewSpec($view_config_id);
 
-  return views_get_view_result($view_config->getMachineName(), 'object_'.$resource_name.'_'.$relationship_name,
+  return views_get_view_result($view_config->getMachineName().'_update', 'object_'.$resource_name.'_'.$relationship_name,
       $subject_id, $resource_config->getRDFType());
 }
 
@@ -99,7 +99,7 @@ function _curios_execute_record_meta_view($resource_name, $subject_id) {
   $resource_config = $config->getResource($resource_name);
   $view_config_id = $config->getViewIdForResource($resource_name);
   $view_config = $config->getViewSpec($view_config_id);
-  return views_get_view_result($view_config->getMachineName(), 'record-meta', $subject_id, $resource_config->getRDFType());
+  return views_get_view_result($view_config->getMachineName().'_update', 'record-meta', $subject_id, $resource_config->getRDFType());
 }
 
 /**
@@ -335,20 +335,21 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
     '#type' => 'hidden',
     '#value' => $value,
   );
-  if (trim(variable_get('osmap_api_key'))!='')
+  if (trim(variable_get('curios_osmap_api_key'))!='')
   {  
     $config = curios_configuration();
     $map_settings = $config->getMapSettings();
 
     if ($instance['field_name']===$map_settings['map_x_prop'])
-      {  drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key='.variable_get('osmap_api_key'));
+      {  drupal_add_js('http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key='.variable_get('curios_osmap_api_key'));
 	 drupal_add_js(drupal_get_path('module', 'curios') . '/js/curios-geo-handler.js');
          drupal_add_js(array('curiosMap' => array('mapXName' => $map_settings['map_x_prop'], 
 						  'mapYName' => $map_settings['map_y_prop'],
-						  'defaultE' => variable_get('default_easting'),
-						  'defaultN' => variable_get('default_northing'),
-   						  'defaultZoom' => variable_get('default_zoom_level')
+						  'defaultE' => variable_get('curios_default_easting'),
+						  'defaultN' => variable_get('curios_default_northing'),
+   						  'defaultZoom' => variable_get('curios_default_zoom_level')
 						  	)), 'setting');
+	var_dump(variable_get('curios_default_zoom_level'));
 	 $form['optional_fields'][$map_settings['map_position']]['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="map"></div>';
       }
   }
@@ -595,7 +596,7 @@ function _curios_update_fieldset_latest_records(&$form, $form_state) {
     '#collapsed' => TRUE,
   );
   $form['latest_records_fieldset'][] = array('#markup' =>
-    '<input type="button" onclick="jQuery(\'#edit-latest-records-fieldset .fieldset-wrapper\').load(\'/curios/latest-records/10\');" value="Load recently created records" />');
+    '<input type="button" onclick="jQuery(\'#edit-latest-records-fieldset .fieldset-wrapper\').load(\''. $GLOBALS['base_path'] .'curios/latest-records/10\');" value="Load recently created records" />');
 }
 
 function _curios_update_fieldset_delete(&$form, $config, $rdf_mapping) {
@@ -672,7 +673,7 @@ function curios_update_form_validate($form, &$form_state) {
     if (!__curios_valid_id($relationship['value'])) {
       form_set_error($error_field_name, t('Relationship value is not a valid subject id.'));
     } else if (!_curios_is_valid_relationship_assertion($resource_name, $relationship['field'], $relationship['value'])) {
-      form_set_error($error_field_name, 'Relationship type is not valid for subject '. $relationship['value']. '.');
+      form_set_error($error_field_name, 'Relationship type '.$resource_name.' is not valid for subject '. $relationship['value']. '.');
     }
   }
 }
@@ -790,7 +791,10 @@ function curios_update_form_submit($form, &$form_state, $redirect = 'edit') {
       drupal_set_message("The record has been updated successfully (ID: $subject_id).", 'status', FALSE);
 
       if ($redirect == 'view') {
+	// invoke cron_job to trigger reasoning	-- This is for experiment only, might cause extremely long response.
+	// module_invoke('curios','cron');
         $form_state['redirect'] = array($view_path, array(), 302);
+	
       }
     } else {
       drupal_set_message('Failed to update record.', 'error', FALSE);

@@ -64,6 +64,10 @@ function curios_install() {
     'title' => 'CURIOS: query endpoint',
     'uri' => $config_endpoints['dataset']['query'],
   );
+   $endpoints['curios_query_update_endpoint'] = (object)array(
+    'title' => 'Query endpoint for no-inference service ( used for update form)',
+    'uri' => $config_endpoints['noinference']['query'],
+  );
   sparql_views_register_endpoints($endpoints);
   
   // Create record types menu.

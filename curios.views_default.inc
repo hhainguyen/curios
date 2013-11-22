@@ -62,6 +62,7 @@ function curios_views_default_views() {
       $views[$view_name] = $view;
     } else {
       $views[$view_name] = __curios_generate_default_view($view_spec);
+      $views[$view_name.'_update'] = __curios_generate_default_view_for_update($view_spec);
     }
   }
   
@@ -79,8 +80,62 @@ function _curios_table_id($resource_name) {
   $select->join('sparql_views_resource_type', 'svrt', 'svrt.id = ep.svid AND svrt.name = :name', array(':name' => $resource_name));
   $rs = $select->execute()->fetchAssoc();
   $endpoint = sparql_views_get_endpoint($rs['endpoint_uri']);
-
   return $endpoint->table_id;
+}
+
+function _curios_get_table_id_from_uri($uri) {
+  $endpoint = sparql_views_get_endpoint($uri);
+  return $endpoint->table_id;
+}
+
+/**
+ * Generates the default set of update view of view displays for a browsing class.
+ */
+function __curios_generate_default_view_for_update(&$view_spec) {
+  $config = curios_configuration();
+
+  $resource_name = $view_spec->getResource()->getMachineName();
+
+  // change the query endpoint to noinference service
+  $config_endpoints = $config->getEndpoints();
+  $table_id = _curios_get_table_id_from_uri($config_endpoints['noinference']['query']);
+
+  $view = new view;
+  $view->name = $view_spec->getMachineName().'_update';
+  $view->human_name = $view_spec->getLabel().'_update';
+  $view->description = $view_spec->getLabel() .' ('. $view_spec->getMachineName().'_update' .')'.' for update endpoint (no inference)';
+  $view->base_table = $table_id;
+  $view->tag = 'CURIOS';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE;
+  
+  // Base fields: URI, dc:title, dc:description.
+  $base_fields = array(
+    'title'       => $resource_name.'_'.$config->getTitleFieldId(),
+    'description' => $resource_name.'_'.$config->getDescriptionFieldId());
+
+  // CURIOS options
+  $view->curios_options['resource_name'] = $resource_name; // Not used currently, config has mapping view_name => resource_name
+
+  // Primary views for updateform.
+  __curios_generate_display('master', $view, $view_spec, $base_fields);
+ // __curios_generate_display('listing', $view, $view_spec, $base_fields);
+  __curios_generate_display('summary', $view, $view_spec, $base_fields);
+  __curios_generate_display('properties', $view, $view_spec, $base_fields);
+  __curios_generate_display('images', $view, $view_spec, $base_fields);
+  __curios_generate_display('admin_tools', $view, $view_spec, $base_fields);
+  __curios_generate_display('record_meta', $view, $view_spec, $base_fields);
+
+  // Relationship blocks.
+  foreach ($view_spec->getObjectFields() as $field_id) {
+    if ($field_id == $config->getImageRelationshipFieldId())
+      continue;
+
+    __curios_generate_object_block($view, $view_spec, $base_fields, $field_id);
+  }
+
+  return $view;
 }
 
 /**
@@ -119,7 +174,7 @@ function __curios_generate_default_view(&$view_spec) {
   __curios_generate_display('admin_tools', $view, $view_spec, $base_fields);
   __curios_generate_display('record_meta', $view, $view_spec, $base_fields);
 
-  // Relatiionship blocks.
+  // Relationship blocks.
   foreach ($view_spec->getObjectFields() as $field_id) {
     if ($field_id == $config->getImageRelationshipFieldId())
       continue;

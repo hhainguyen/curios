@@ -25,6 +25,8 @@
 function curios_format_daterange($dateFrom, $dateTo) {
   // remove T24:00:00 format from datetime => to well-form date
   // FIXED: 32bit strtoTime avoided by string processing.
+  if ($dateFrom === "" || $dateTo==="")
+	return;
   $arrDateFrom = explode('-',preg_replace('/T.+$/', '', $dateFrom));
   $arrDateTo = explode('-',preg_replace('/T.+$/', '', $dateTo));
   $strYearFrom = $arrDateFrom[0];

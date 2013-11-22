@@ -429,7 +429,9 @@ function _curios_installed_resource_types($resources, &$config) {
       'label' => t($entity->getLabel()),
       'base' => 'sparql_views_resource',
       'description' => t($entity->getLabel()),
-      'endpoints' => array($config_endpoints['dataset']['query'] => TRUE),
+	// enable 2 endpoints by default
+      'endpoints' => array($config_endpoints['dataset']['query'] => TRUE
+			  ,$config_endpoints['noinference']['query'] => TRUE),
     );
   }
 

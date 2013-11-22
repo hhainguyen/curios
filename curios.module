@@ -2,7 +2,7 @@
 /*
  * curios.module
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk), Hai Nguyen (hai.nguyen@abdn.ac.uk)
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
@@ -315,4 +315,13 @@ function curios_rdf_mapping() {
 function curios_rdf_namespaces() {
   $config = curios_configuration();
   return $config->getPrefixToNamespaceMap();
+}
+
+/**
+ * Cron to trigger reasoning service
+ */
+function curios_cron(){
+
+   _curios_trigger_inference();
+ 
 }
