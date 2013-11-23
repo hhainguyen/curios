@@ -349,7 +349,7 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
 						  'defaultN' => variable_get('curios_default_northing'),
    						  'defaultZoom' => variable_get('curios_default_zoom_level')
 						  	)), 'setting');
-	var_dump(variable_get('curios_default_zoom_level'));
+
 	 $form['optional_fields'][$map_settings['map_position']]['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="map"></div>';
       }
   }
