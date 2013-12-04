@@ -76,6 +76,9 @@ function curios_latest_records($n = 15) {
   return array('#markup' => $content);
 }
 
+
+
+
 /**
  * Ajax callback for latest records list from hook_menu,
  */

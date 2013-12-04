@@ -364,6 +364,17 @@ function __curios_generate_display_summary_default(&$view, &$view_spec, $base_fi
   $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
   $handler->display->display_options['fields'][$field_name]['alter']['path'] = $view_spec->getPath().'/';
 
+    // Field: update link to trigger recomputation of inferences
+  $field_name = 'updatelink';
+  $handler->display->display_options['fields'][$field_name]['id'] = $field_name;
+  $handler->display->display_options['fields'][$field_name]['table'] = 'views';
+  $handler->display->display_options['fields'][$field_name]['field'] = 'nothing';
+  $handler->display->display_options['fields'][$field_name]['ui_name'] = 'Update record';
+  $handler->display->display_options['fields'][$field_name]['label'] = '';
+  $handler->display->display_options['fields'][$field_name]['alter']['text'] = 'Make this record up-to-date';
+  $handler->display->display_options['fields'][$field_name]['alter']['make_link'] = 1;
+  $handler->display->display_options['fields'][$field_name]['alter']['path'] = 'curios/manage/recompute-inferences/'.$view_spec->getPath()."/[$subject_id_field]";
+
   // Contextual filters.
   __curios_uri_filter($handler, $view, $view_spec);
   __curios_rdf_type_filter($handler, $view, $view_spec);

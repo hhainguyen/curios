@@ -157,9 +157,28 @@ function curios_menu() {
     'access arguments' => array('curios manage repository'),
     'delivery callback' => 'curios_latest_records_ajax',
   );
+  $items['curios/manage/recompute-inferences/%/%'] = array(
+    'page callback' => 'curios_recompute_inferences',
+    'type' => MENU_CALLBACK,
+    'page arguments' => array(3,4),
+    'access arguments' => array('curios manage repository'),
+  );
 
   return $items;
 }
+
+/**
+ * Recompute the inferences
+ */
+function curios_recompute_inferences($view,$subjectid)
+{	
+	_curios_trigger_inference();
+	drupal_set_message("The inferences have been recomputed. All records are up-to-date.");
+	watchdog('curios',"The inferences have been recomputed.");
+ 	drupal_goto($view.'/'.$subjectid);
+
+}
+
 
 /**
  * Implements hook_block_info.
