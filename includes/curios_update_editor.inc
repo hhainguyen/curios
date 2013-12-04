@@ -233,6 +233,10 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
   $editor_notes_field = $config->getField($config->getEditorNotesFieldId());
   $views_editor_notes_field  = $resource_type->name.'_'.$editor_notes_field->getId();
   $editor_notes_value  = isset($view_result[0]->$views_editor_notes_field ) ? $view_result[0]->$views_editor_notes_field  : '';
+
+  $maintainer_field = $config->getField($config->getMaintainerFieldId());
+  $views_maintainer_field  = $resource_type->name.'_'.$maintainer_field->getId();
+  $maintainer_field_value  = isset($view_result[0]->$views_maintainer_field) ? $view_result[0]->$views_maintainer_field  : '';
   
   $form['record_meta'] = array(
     '#type' => 'fieldset',
@@ -247,11 +251,29 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
     '#size' => '80',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$owner_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $owner_value,
+    '#autocomplete_path' => 'curios/manage/autocomplete_fields/'. $resource_type->name .'/'. $owner_field->getId(),
   );
+
   $form['old_'.$owner_field->getId()] = array(
     '#type' => 'hidden',
     '#value' => $owner_value,
   );
+
+   $form['record_meta'][$maintainer_field->getId()] = array(
+    '#type' => 'textfield',
+    '#title' => t($maintainer_field->getLabel()),
+    '#required' => FALSE,
+    '#size' => '80',
+    '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$maintainer_field->getId()]['predicates'][0] .')</span>',
+    '#default_value' => $maintainer_field_value,
+    '#autocomplete_path' => 'curios/manage/autocomplete_fields/'. $resource_type->name .'/'. $maintainer_field->getId(),
+  );
+
+  $form['old_'.$maintainer_field->getId()] = array(
+    '#type' => 'hidden',
+    '#value' => $maintainer_field_value,
+  );
+ 
   $form['record_meta'][$published_field->getId()] = array(
     '#type' => 'textfield',
     '#title' => t($published_field->getLabel()),
@@ -259,6 +281,7 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
     '#size' => '80',
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$published_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $published_value,
+    '#autocomplete_path' => 'curios/manage/autocomplete_fields/'. $resource_type->name .'/'. $published_field->getId(),
   );
   $form['old_'.$published_field->getId()] = array(
     '#type' => 'hidden',
@@ -270,6 +293,7 @@ function _curios_update_fieldset_record_meta(&$form, $config, $rdf_mapping, $res
     '#required' => FALSE,
     '#field_suffix' => '<span class="rdf-predicate">('. $rdf_mapping[$editor_notes_field->getId()]['predicates'][0] .')</span>',
     '#default_value' => $editor_notes_value,
+    '#autocomplete_path' => 'curios/manage/autocomplete_fields/'. $resource_type->name .'/'. $editor_notes_field->getId(),
   );
   $form['old_'.$editor_notes_field->getId()] = array(
     '#type' => 'hidden',
@@ -349,7 +373,7 @@ function curios_update_form_add_text_field(&$form, $resource_type, $instance, $r
 						  'defaultN' => variable_get('curios_default_northing'),
    						  'defaultZoom' => variable_get('curios_default_zoom_level')
 						  	)), 'setting');
-	var_dump(variable_get('curios_default_zoom_level'));
+
 	 $form['optional_fields'][$map_settings['map_position']]['#field_suffix'] = '<span class="rdf-predicate">('.$rdf_mapping[$instance['field_name']]['predicates'][0].')</span><div id="map"></div>';
       }
   }
@@ -544,6 +568,10 @@ function _curios_update_fieldset_new_relationships(&$form, &$form_state, $rdf_ma
         '#empty_option' => '- Select relationship -',
         '#required' => FALSE,
         '#options' => $relationship_options,
+	'#ajax' => array(
+            'callback' => 'curios_update_relationship_input_select_change',
+            'wrapper' => 'relationships-create-fieldset-wrapper',
+          ),
       );
 
       // Field value input.
@@ -638,7 +666,6 @@ function curios_update_relationship_input_add($form, &$form_state) {
     }
   $form_state['storage']['relationship_group_count'] += 1;
   $form_state['rebuild'] = TRUE;
-
 }
 /** Ajax callback. */
 function curios_update_relationship_input_callback($form, $form_state) {
@@ -649,7 +676,20 @@ function curios_update_relationship_input_remove($form, &$form_state) {
   $form_state['storage']['relationship_group_remove'][] = $form_state['triggering_element']['#name'];
   $form_state['rebuild'] = TRUE;
 }
+/** Ajax callback to show a list of valid target types when user creates a relationship (link). */
+function curios_update_relationship_input_select_change($form, &$form_state) {
+	$resource_name = $form_state['values']['resource'];
+	$relationship_name = end($form_state['values']['relationship_fieldset'])['field'];
+	$config = curios_configuration();
+	$resource = $config->getResource($resource_name);
 
+	foreach ($resource->getRelationshipTargets($relationship_name) as $targets)
+	  $target_names[] = $config->getResource($targets)->getLabel();
+
+
+	$form['relationship_fieldset'][] = array('#markup' =>  t('Please enter a valid subject ID of the following types:').' <b>'.implode(', ',$target_names).'</b>');
+	return $form['relationship_fieldset'];
+}
 
 // VALIDATION HANDLERS
 
@@ -661,7 +701,6 @@ function curios_update_relationship_input_remove($form, &$form_state) {
  */
 function curios_update_form_validate($form, &$form_state) {
   $resource_name = $form_state['values']['resource'];
-
   // Validate relationships.
   $relationships = $form_state['values']['relationship_fieldset'];
   array_pop($relationships);
@@ -673,7 +712,9 @@ function curios_update_form_validate($form, &$form_state) {
     if (!__curios_valid_id($relationship['value'])) {
       form_set_error($error_field_name, t('Relationship value is not a valid subject id.'));
     } else if (!_curios_is_valid_relationship_assertion($resource_name, $relationship['field'], $relationship['value'])) {
-      form_set_error($error_field_name, 'Relationship type '.$resource_name.' is not valid for subject '. $relationship['value']. '.');
+      //  get label of the relationship and set error
+	      $relationship_label = implode(' ',array_slice(explode('_',$relationship['field']),1));
+	      form_set_error($error_field_name, 'Relationship type <b>"'.$relationship_label.'"</b> is not valid for subject '. $relationship['value']. '.');
     }
   }
 }
@@ -789,12 +830,11 @@ function curios_update_form_submit($form, &$form_state, $redirect = 'edit') {
 
     if ($success) {
       drupal_set_message("The record has been updated successfully (ID: $subject_id).", 'status', FALSE);
-
+      watchdog('curios_activity',t('Update %recordID with %new'),array('%recordID'=>$subject_id,'%new'=>$triples_insert),WATCHDOG_INFO,$link = NULL);
       if ($redirect == 'view') {
-	// invoke cron_job to trigger reasoning	-- This is for experiment only, might cause extremely long response.
+	//hhn: invoke cron_job to trigger reasoning -- This is for experiment only, might cause extremely long response.
 	// module_invoke('curios','cron');
         $form_state['redirect'] = array($view_path, array(), 302);
-	
       }
     } else {
       drupal_set_message('Failed to update record.', 'error', FALSE);

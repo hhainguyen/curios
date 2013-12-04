@@ -69,7 +69,7 @@ function curios_latest_records($n = 15) {
   $content .= '<h2>Recently created records:</h2>';
   $content .= '<ul class="plain-list">';
   foreach ($latest_records as $id=>$title) {
-    $content .= "<li><input type=\"text\" size=\"8\" value=\"$id\" readonly=\"readonly\" /> &nbsp; $title</li>";
+    $content .= "<li><input type=\"text\" size=\"8\" value=\"$id\" readonly=\"readonly\" /> &nbsp; $title </li>";
   }
   $content .= '</ul>';
 
@@ -172,6 +172,7 @@ function curios_delete_form_submit($form, &$form_state) {
 
   if ($success) {
     drupal_set_message("The record has been deleted successfully  (ID: $subject_id).", 'status', FALSE);
+    watchdog('curios_activity',t('Delete %recordID'),array('%recordID'=>$subject_id),WATCHDOG_INFO,$link = NULL);
     $form_state['redirect'] = array("curios/manage", array(), 302);
   } else {
     drupal_set_message("Failed to delete record.", 'error', FALSE);
@@ -187,6 +188,7 @@ function curios_resources_form_select() {
   $resources = entity_load('sparql_views_resource_type');
 
   foreach ($resources as $entity) {
+   
     if ($entity->name == $config->getDefaultResourceId() ||
         $config->getResource($entity->name) == NULL) {
       continue;
@@ -341,7 +343,7 @@ function curios_insert_form_submit($form, &$form_state, $redirect = 'edit') {
 
   if ($success) {
     drupal_set_message("The new record has been created successfully (ID: $subject_id).", 'status', FALSE);
-
+    watchdog('curios_activity',t('Create %recordID' ),array('%recordID'=>$subject_id),WATCHDOG_INFO,$link = NULL);
     switch ($redirect) {
       case 'create':
         $path = "curios/manage/create/$resource_name";
@@ -379,7 +381,7 @@ function __is_description_field($field_instance) {
 }
 
 function __is_special_field($field_instance, $config) { 
-  return $field_instance['field_name'] == $config->getImageRelationshipFieldId() ||
+  return $field_instance['field_name'] == $config->getImageRelationshipFieldId() || // FIXME Image relationship should be treated as normal relationships. 
          $field_instance['field_name'] == $config->getOwnerFieldId() ||
          $field_instance['field_name'] == $config->getMaintainerFieldId() ||
          $field_instance['field_name'] == $config->getPublishedFieldId()||

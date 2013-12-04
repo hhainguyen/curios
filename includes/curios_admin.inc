@@ -149,7 +149,7 @@ function curios_admin_compute_inference_submit($form, &$form_state) {
   if (_curios_trigger_inference())
 	  drupal_set_message(t('The inference graph has been recomputed!'));
   else
-	  drupal_set_message(t('The inference graph is up-to-dated. No recomputation required.'));
+	  drupal_set_message(t('The inference graph is up-to-dated and no recomputation required, or something was wrong with the inference engine.'));
 }
 
 

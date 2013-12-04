@@ -977,7 +977,7 @@ function __curios_generate_display_images_default(&$view, &$view_spec, $base_fie
   $handler->display->display_options['fields']['curios_link_target_rewriter']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['curios_link_target_rewriter']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['curios_link_target_rewriter']['title_field'] = $base_fields['title'];
-
+  
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -1148,12 +1148,16 @@ function __curios_generate_display_record_meta_default(&$view, &$view_spec, $bas
   $handler->display->display_options['fields'][$owner_field_name]['required'] = 0;
 
   // Maintainer field.
-  //  $maintainer_field_name = $resource_name.'_'.$config->getMaintainerFieldId();
-  //  $maintainer_field = $config->getField($config->getMaintainerFieldId());
-  //  $handler->display->display_options['fields'][$maintainer_field_name]['id'] = $maintainer_field_name;
-  //  $handler->display->display_options['fields'][$maintainer_field_name]['table'] = $view->base_table;
-  //  $handler->display->display_options['fields'][$maintainer_field_name]['field'] = $maintainer_field_name;
-  //  $handler->display->display_options['fields'][$maintainer_field_name]['label'] = __format_name($maintainer_field->getLabel());
+  $maintainer_field_name = $resource_name.'_'.$config->getMaintainerFieldId();
+  $maintainer_field = $config->getField($config->getMaintainerFieldId());
+  $handler->display->display_options['fields'][$maintainer_field_name]['id'] = $maintainer_field_name;
+  $handler->display->display_options['fields'][$maintainer_field_name]['table'] = $view->base_table;
+  $handler->display->display_options['fields'][$maintainer_field_name]['field'] = $maintainer_field_name;
+  $handler->display->display_options['fields'][$maintainer_field_name]['label'] = __format_name($maintainer_field->getLabel());
+  $handler->display->display_options['fields'][$maintainer_field_name]['element_label_type'] = 'strong';
+  $handler->display->display_options['fields'][$maintainer_field_name]['element_label_colon'] = 1;
+  $handler->display->display_options['fields'][$maintainer_field_name]['hide_empty'] = 1;
+  $handler->display->display_options['fields'][$maintainer_field_name]['required'] = 0;
 
   // Published field.
   $published_field_name = $resource_name.'_'.$config->getpublishedFieldId();

@@ -69,8 +69,8 @@ function __curios_configuration_options($config, $config_spec) {
   $config->setOwnerFieldId($owner_field_id);
 
   // Maintainer field.
-  //$maintainer_field_id = $config->getCMSID($config_spec['options']['maintainer_property']);
-  //$config->setMaintainerFieldId($maintainer_field_id);
+  $maintainer_field_id = $config->getCMSID($config_spec['options']['maintainer_property']);
+  $config->setMaintainerFieldId($maintainer_field_id);
 
   // Published field.
   $published_field_id = $config->getCMSID($config_spec['options']['published_property']);
@@ -193,8 +193,9 @@ function __curios_configuration_resources_views($config, $config_spec) {
     $title_field = $config->getCMSID($title_property);
     $description_property = $row['description'];
     $description_field = $config->getCMSID($description_property);
-
-    $config->addResource(new RDFResource($resource_id, $resource_label, $base_class_curie));
+    // FIXED: Label for RDF resource should come from the Config file, not from the class
+    // $config->addResource(new RDFResource($resource_id, $resource_label, $base_class_curie));
+    $config->addResource(new RDFResource($resource_id, $row['label'], $base_class_curie));
     $config->addViewSpec(new RDFViewSpec($browsing_class_id, $browsing_class_label, $view_path, NULL, $config->getResource($resource_id), $title_field, $description_field));
   }
   $config->setResourceToViewMap($resourceToViewMap);

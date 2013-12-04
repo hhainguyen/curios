@@ -59,7 +59,6 @@ class curios_image_thumbnail_field extends views_handler_field {
 
   function render($values) {
     $config = curios_configuration();
-
     $image_url_field = $config->getImageResourceId() .'_'. $config->getURLFieldId();
     $image_url = $values->$image_url_field;
     $image_url = str_replace('http://www.hebrideanconnections.com/', 'http://www.dotrural.ac.uk/curiosdemo/', $image_url);

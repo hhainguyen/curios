@@ -302,7 +302,7 @@ $fields[] = array(
 );
 $fields[] = array(
    'property' => 'hc:ownedBySociety',
-   'label'    => 'Record Owner',
+   'label'    => 'Record Owned By',
    'type'     => 'autocomplete',
 );
 $fields[] = array(
@@ -322,7 +322,7 @@ $fields[] = array(
 );
 $fields[] = array(
    'property' => 'hc:maintainedBySociety',
-   'label'    => 'Record Maintainers',
+   'label'    => 'Record Maintained By',
    'type'     => 'autocomplete',
 );
 $fields[] = array(
@@ -480,7 +480,7 @@ $fields[] = array(
 );
 $fields[] = array(
    'property' => 'hc:compiledBy',
-   'label'    => 'Compiled By',
+   'label'    => 'Compiled By Organisation',
    'type'     => 'relationship',
 );
 $fields[] = array(
@@ -515,7 +515,7 @@ $fields[] = array(
 );
 $fields[] = array(
    'property' => 'hc:writtenCompiledBy',
-   'label'    => 'Written Compiled By',
+   'label'    => 'Written By Person',
    'type'     => 'relationship',
 );
 $fields[] = array(
@@ -665,7 +665,7 @@ $fields[] = array(
 );
 $fields[] = array(
    'property' => 'hc:fromSource',
-   'label'    => 'From Source',
+   'label'    => 'From Person',
    'type'     => 'relationship',
 );
 
@@ -2023,10 +2023,6 @@ $relationship_assignments['people'][] = array(
 $relationship_assignments['people'][] = array(
    'property' => 'hc:fosteredBy',
    'target' => 'hc:Person',
-);
-$relationship_assignments['people'][] = array(
-   'property' => 'hc:usedObject',
-   'target' => 'hc:ObjectOrArtefact',
 );
 $relationship_assignments['people'][] = array(
    'property' => 'hc:bornAt',

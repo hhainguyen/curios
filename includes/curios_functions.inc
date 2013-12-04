@@ -2,7 +2,7 @@
 /*
  * curios_functions.inc
  * 
- * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk),
+ * Copyright (c) 2011-2013, Stuart Taylor (staylor@abdn.ac.uk) and Hai Nguyen (hai.nguyen@abdn.ac.uk),
  * University of Aberdeen. All rights reserved.
  *
  * CURIOS: Linked Data CMS is free software: you can redistribute it and/or
