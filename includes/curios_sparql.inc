@@ -146,13 +146,27 @@ function _curios_subject_delete($subject_id) {
 function _curios_subject_insert($rdf_type, $triples_insert) {
   $config = curios_configuration();
   $namespace = $config->getDefaultNamespace();
-
+  
   $id_field = $config->getField($config->getIdentifierFieldId());
   $id_property = $id_field->getRDFPredicate();
 
-  $default_browsing_class = $config->getResource($config->getDefaultResourceId());
-  $default_class = $default_browsing_class->getBaseClass();
+ // $default_browsing_class = $config->getResource($config->getDefaultResourceId());
+ // $default_class = $default_browsing_class->getBaseClass();
 
+$max_id = _curios_fetch_max_identifier();
+if ($max_id<0) 
+{
+	$id = 1;
+	$query = <<<EOT
+	INSERT DATA{
+	  <{$namespace}{$id}> a {$rdf_type} ;
+	    {$id_property} {$id} ;
+	{$triples_insert} .
+	}
+EOT;
+}
+else 
+{
   $query = <<<EOT
 INSERT {
   ?uri a {$rdf_type} ;
@@ -162,13 +176,14 @@ INSERT {
   SELECT ?uri ?id {
     {
       SELECT ((MAX(?n) + 1) AS ?id) {
-        [] {$id_property} ?n ; a {$default_class} .
+        [] {$id_property} ?n .
       }
     }
     BIND(URI(CONCAT("{$namespace}", STR(?id))) as ?uri) .
   }
 }
 EOT;
+}
 
   return __curios_sparql_update($query);
 }
